@@ -193,7 +193,11 @@ namespace PdfSharp.Pdf.IO
             _pdfSteam.Position = pos;
             byte[] bytes = new byte[length];
             int read = _pdfSteam.Read(bytes, 0, length);
-            Debug.Assert(read == length);
+            if (read != length)
+            {
+                throw new EndOfStreamException("Caught potential freeze case - this file is probably malformed.");
+                //Debug.Assert(read == length);
+            }
 
             // Synchronize idxChar etc.
             Position = pos + length;
